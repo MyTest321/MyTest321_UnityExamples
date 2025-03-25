@@ -48,15 +48,23 @@ public class SRP001CameraRenderer {
         m_cmd.Clear();
 	}
 
-    void DrawRendererList(ref DrawingSettings refDrawingSettings, ref FilteringSettings refFilteringSettings) {
-        // ensure execute all commands before CoreUtils.DrawRendererList
-        ExecCmdBuf();
-        
-        // and new one
+    void DrawObjects(ref DrawingSettings refDrawingSettings, ref FilteringSettings refFilteringSettings) {
         RendererListParams renderListParams = new RendererListParams(m_cullingResults, refDrawingSettings, refFilteringSettings);
         RendererList renderList = m_context.CreateRendererList(ref renderListParams);
-        CoreUtils.DrawRendererList(m_context, m_cmd, renderList);
+        DrawRendererList(ref renderList);
     }
+
+	void OnRender_SkyBox() {
+		var renderList = m_context.CreateSkyboxRendererList(m_camera);
+        DrawRendererList(ref renderList);
+	}
+
+	void DrawRendererList(ref RendererList refRenderList) {
+		// ensure execute all commands before CoreUtils.DrawRendererList
+        ExecCmdBuf();
+
+		CoreUtils.DrawRendererList(m_context, m_cmd, refRenderList);
+	}
 
     void OnRender_Unlit_Opaque() {
         var sortingSettings = new SortingSettings(m_camera) {
@@ -66,7 +74,7 @@ public class SRP001CameraRenderer {
             layerMask = m_camera.cullingMask
         };
         var drawingSettings = new DrawingSettings(ShaderPassTags.MyShaderPassName, sortingSettings);
-        DrawRendererList(ref drawingSettings, ref filteringSettings);
+        DrawObjects(ref drawingSettings, ref filteringSettings);
     }
 
     void OnRender_Transparent() {
@@ -77,12 +85,10 @@ public class SRP001CameraRenderer {
             layerMask = m_camera.cullingMask
         };
         var drawingSettings = new DrawingSettings(ShaderPassTags.MyShaderPassName, sortingSettings);
-        DrawRendererList(ref drawingSettings, ref filteringSettings);
+        DrawObjects(ref drawingSettings, ref filteringSettings);
     }
 
-    void OnRender() {
-        //RenderPipelineManager.BeginCameraRendering(m_context, m_camera);
-        
+    void OnRender() {        
         bool clearDepth = m_camera.clearFlags >= CameraClearFlags.Depth;
         bool clearColor = m_camera.clearFlags >= CameraClearFlags.Color;
         m_cmd.ClearRenderTarget(clearDepth, clearColor, m_camera.backgroundColor);
@@ -90,12 +96,13 @@ public class SRP001CameraRenderer {
 
 		if (m_camera.TryGetCullingParameters(out var p)) {
             m_cullingResults = m_context.Cull(ref p);
+
             OnRender_Unlit_Opaque();
+			OnRender_SkyBox();
             OnRender_Transparent();
 		}
 
         ExecCmdBuf();
-        //RenderPipelineManager.EndCameraRendering(m_context, m_camera);
     }
 
     void OnBeginRender() {
@@ -107,7 +114,7 @@ public class SRP001CameraRenderer {
         m_context.Submit();
     }
 
-    public void Render (ref ScriptableRenderContext context, Camera camera, SRP001RPAsset asset) {
+    public void Render(ref ScriptableRenderContext context, Camera camera, SRP001RPAsset asset) {
 		m_context = context;
 		m_camera  = camera;
         m_asset   = asset;

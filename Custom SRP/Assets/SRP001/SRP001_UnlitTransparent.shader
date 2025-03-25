@@ -3,7 +3,7 @@
 	Properties
 	{
 		_MainTex ("_MainTex (RGBA)", 2D) = "white" {}
-		[HDR] _Color("Main Color", Color) = (1,1,1,1)
+		_Color("Main Color", Color) = (1,1,1,1)
 	}
 	SubShader
 	{
@@ -43,8 +43,7 @@
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
+			MY_SAMPLER2D(_MainTex)
 			float4 _Color;
 			CBUFFER_END
 			
@@ -59,7 +58,7 @@
 			
 			float4 frag (v2f i) : SV_Target
 			{
-				float4 col = tex2D(_MainTex, i.uv) * _Color;
+				float4 col = MY_SAMPLE_SAMPLER2D(_MainTex, i.uv) * _Color;
 				return col;
 			}
 			ENDHLSL
