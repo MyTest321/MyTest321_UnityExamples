@@ -26,7 +26,7 @@
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#include "../MyCommon/ShaderLibrary/MyCommon.hlsl"
+			#include "../MyCommon/myshader/myshader.hlsl"
 
 			struct appdata
 			{

@@ -17,7 +17,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "../MyCommon/ShaderLibrary/MyCommon.hlsl"
+			#include "../MyCommon/myshader/myshader.hlsl"
 
 			struct appdata
 			{
@@ -32,8 +32,7 @@
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
+			MY_SAMPLER2D(_MainTex)
 			float4 _Color;
 			CBUFFER_END
 			
@@ -47,8 +46,8 @@
 			
 			float4 frag (v2f i) : SV_Target
 			{
-				float4 col = tex2D(_MainTex, i.uv);
-				return col * _Color;
+				float4 col = MY_SAMPLE_SAMPLER2D(_MainTex, i.uv) * _Color;
+				return col;
 			}
 			ENDHLSL
 		}
