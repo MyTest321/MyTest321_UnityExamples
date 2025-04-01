@@ -1,8 +1,8 @@
-Shader "MyCustomSRP/SRP001/Unlit"
+Shader "MyCustomSRP/SRP0102/Unlit"
 {
 	Properties
 	{
-		[Title(SRP001 Title)]
+		[Title(SRP0102 Title)]
 		[Tooltip(base tex)]
 		_MainTex ("_MainTex (RGBA)", 2D) = "white" {}
 
@@ -27,14 +27,13 @@ Shader "MyCustomSRP/SRP001/Unlit"
 
 		Pass
 		{
+			Tags { "LightMode" = "SRP0102_Pass" }
 			ZWrite [_ZWrite]
 
-			Tags { "LightMode" = "SRP001_Pass" }
-
 			HLSLPROGRAM
-			#pragma vertex 		SRP001_Unlit_Pass_vert
-			#pragma fragment 	SRP001_Unlit_Pass_frag
-            #include "SRP001_Unlit_Pass.hlsl"
+			#pragma vertex 		SRP0102_Unlit_Pass_vert
+			#pragma fragment 	SRP0102_Unlit_Pass_frag
+            #include "SRP0102_Unlit_Pass.hlsl"
 			ENDHLSL
 		}
 	}

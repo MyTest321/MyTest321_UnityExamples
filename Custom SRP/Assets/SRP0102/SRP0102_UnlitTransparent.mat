@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SRP001_UnlitTransparent
+  m_Name: SRP0102_UnlitTransparent
   m_Shader: {fileID: 4800000, guid: efb5166801006b4438ec8edb29c1b061, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

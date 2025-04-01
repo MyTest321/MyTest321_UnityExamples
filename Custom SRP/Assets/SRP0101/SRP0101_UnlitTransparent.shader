@@ -1,4 +1,4 @@
-﻿Shader "MyCustomSRP/SRP001/UnlitTransparent"
+﻿Shader "MyCustomSRP/SRP0101/UnlitTransparent"
 {
 	Properties
 	{
@@ -21,7 +21,7 @@
 
 		Pass
 		{
-			Tags { "LightMode" = "SRP001_Pass" }
+			Tags { "LightMode" = "SRP0101_Pass" }
 
 			HLSLPROGRAM
 			#pragma vertex vert

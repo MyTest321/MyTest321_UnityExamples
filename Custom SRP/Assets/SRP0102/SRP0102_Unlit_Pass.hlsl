@@ -1,5 +1,5 @@
-#ifndef __SRP001_UNLIT_PASS_HLSL__
-#define __SRP001_UNLIT_PASS_HLSL__
+#ifndef __SRP0102_UNLIT_PASS_HLSL__
+#define __SRP0102_UNLIT_PASS_HLSL__
 
 struct appdata
 {
@@ -18,7 +18,7 @@ MY_SAMPLER2D(_MainTex)
 float4 _Color;
 CBUFFER_END
 
-v2f SRP001_Unlit_Pass_vert(appdata v)
+v2f SRP0102_Unlit_Pass_vert(appdata v)
 {
     v2f o;
     o.vertex = TransformObjectToHClip(v.vertex.xyz);
@@ -26,10 +26,10 @@ v2f SRP001_Unlit_Pass_vert(appdata v)
     return o;
 }
 
-float4 SRP001_Unlit_Pass_frag(v2f i) : SV_TARGET
+float4 SRP0102_Unlit_Pass_frag(v2f i) : SV_TARGET
 {
     float4 col = MY_SAMPLE_SAMPLER2D(_MainTex, i.uv) * _Color;
     return col;
 }
 
-#endif // __SRP001_UNLIT_PASS_HLSL__
+#endif // __SRP0102_UNLIT_PASS_HLSL__

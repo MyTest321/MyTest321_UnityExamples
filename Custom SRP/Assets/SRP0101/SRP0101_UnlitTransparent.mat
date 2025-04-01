@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SRP001_UnlitOpaque
-  m_Shader: {fileID: 4800000, guid: 5124dfc606b28bc4fb4a9eca7dd9ab99, type: 3}
+  m_Name: SRP0101_UnlitTransparent
+  m_Shader: {fileID: 4800000, guid: c7129f6da4d7e734caf1883a20bcec23, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -30,6 +30,6 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.38823527, g: 0.7254902, b: 0.68627447, a: 0.27450982}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

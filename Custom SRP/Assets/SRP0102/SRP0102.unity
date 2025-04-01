@@ -611,7 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb7cf3babd991944a725a123a95e2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderPipelineAsset: {fileID: 11400000, guid: 66ede5d5c1ebbac4b9e16b8b09c097ae, type: 2}
+  renderPipelineAsset: {fileID: 11400000, guid: a56850d70d4104045a0755a5aa20d93c, type: 2}
 --- !u!1 &1485985477
 GameObject:
   m_ObjectHideFlags: 0
