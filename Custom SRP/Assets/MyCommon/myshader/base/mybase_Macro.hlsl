@@ -1,15 +1,6 @@
 #ifndef __mybase_Macro_HLSL__
 #define __mybase_Macro_HLSL__
 
-#if MY_SHADER_USE_SCRATCH_INPUT_MACRO_HLSL
-	#include "InputMacro.hlsl"
-#endif
-
-#if MY_SHADER_USE_SCRATCH_INPUT_BUILTIN_HLSL
-	#include "UnityBuiltIn.hlsl"
-#endif
-
-
 #define MY_TEXTURE2D(T) \
 	TEXTURE2D(T); \
 	float4 T##_ST; \

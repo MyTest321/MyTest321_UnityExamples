@@ -1,54 +1,59 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+namespace SRP0101 {
+
 [CreateAssetMenu(menuName = "Rendering/SRP0101RPAsset")]
 public class SRP0101RPAsset : MyRenderPipelineAssetBase {
+    public ShaderTagId shaderTagId;
     protected override RenderPipeline CreatePipeline() {
-        MyShaderTagIDManager.instance.Register("SRP0101_Pass");
+        shaderTagId = new ShaderTagId("SRP0101_Pass");
         return new SRP0101RP(new SRP0101CameraRenderer(), this);
     }
 }
 
-public class SRP0101RP : MyRenderPipelineBase {
+public sealed class SRP0101RP : MyRenderPipelineBase {
     public SRP0101RP(SRP0101CameraRenderer renderer, SRP0101RPAsset asset) : base(renderer, asset) {}
 }
 
 public class SRP0101CameraRenderer : MyCameraRendererBase {
-    SRP0101RPAsset m_asset;
-
-    protected virtual ShaderTagId shaderTagId() {
-        return MyShaderTagIDManager.instance.GetShaderTagId("SRP0101_Pass");
+    protected virtual ShaderTagId GetShaderTagId() {
+        var asset = m_asset as SRP0101RPAsset;
+        return asset.shaderTagId;
     }
 
-	void OnRender_SkyBox() {
+    protected virtual void OnRenderSetUp() {
+        m_cmd.name = "SRP0101 CmdBuf";
+    }
+
+	protected void OnRender_SkyBox() {
 		var renderList = m_context.CreateSkyboxRendererList(m_camera);
         DrawRendererList(ref renderList);
 	}
 
-    void OnRender_Unlit_Opaque() {
+    protected void OnRender_Opaque() {
         var sortingSettings = new SortingSettings(m_camera) {
             criteria = SortingCriteria.CommonOpaque
         };
         var filteringSettings = new FilteringSettings(RenderQueueRange.opaque) {
             layerMask = m_camera.cullingMask
         };
-        var drawingSettings = new DrawingSettings(shaderTagId(), sortingSettings);
+        var drawingSettings = new DrawingSettings(GetShaderTagId(), sortingSettings);
         DrawObjects(ref drawingSettings, ref filteringSettings);
     }
 
-    void OnRender_Transparent() {
+    protected void OnRender_Transparent() {
         var sortingSettings = new SortingSettings(m_camera) {
             criteria = SortingCriteria.CommonTransparent
         };
         var filteringSettings = new FilteringSettings(RenderQueueRange.transparent) {
             layerMask = m_camera.cullingMask
         };
-        var drawingSettings = new DrawingSettings(shaderTagId(), sortingSettings);
+        var drawingSettings = new DrawingSettings(GetShaderTagId(), sortingSettings);
         DrawObjects(ref drawingSettings, ref filteringSettings);
     }
 
-    protected void OnRender_Impl() {        
+    protected virtual void OnRender_Impl() {        
         bool clearDepth = m_camera.clearFlags >= CameraClearFlags.Depth;
         bool clearColor = m_camera.clearFlags >= CameraClearFlags.Color;
         m_cmd.ClearRenderTarget(clearDepth, clearColor, m_camera.backgroundColor);
@@ -56,19 +61,15 @@ public class SRP0101CameraRenderer : MyCameraRendererBase {
 		if (m_camera.TryGetCullingParameters(out var p)) {
             m_cullingResults = m_context.Cull(ref p);
 
-            OnRender_Unlit_Opaque();
+            OnRender_Opaque();
 			OnRender_SkyBox();
             OnRender_Transparent();
 		}
-
         ExecCmdBuf();
     }
 
     protected override void OnRender(MyRenderPipelineAssetBase asset) {
-        Debug.LogError("1111111111");
-        m_asset    = asset as SRP0101RPAsset;
-        m_cmd.name = "SRP0101 CmdBuf";
-
+        OnRenderSetUp();
         OnBeginRender();
         OnRender_Impl();
         OnEndRender();
@@ -83,3 +84,4 @@ public class SRP0101CameraRenderer : MyCameraRendererBase {
         m_context.Submit();
     }
 }
+} // namespace SRP0101

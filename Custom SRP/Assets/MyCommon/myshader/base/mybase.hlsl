@@ -1,46 +1,21 @@
 #ifndef __mybase_HLSL__
 #define __mybase_HLSL__
 
-#include "mybase_Macro.hlsl"
+// Unity HLSL
+    // Core RP: https://github.com/Unity-Technologies/Graphics/tree/master/Packages/com.unity.render-pipelines.core/ShaderLibrary
+    // Universal RP: https://github.com/Unity-Technologies/Graphics/tree/master/Packages/com.unity.render-pipelines.universal/ShaderLibrary
+    // High Definition RP: https://github.com/Unity-Technologies/Graphics/tree/master/Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 
-// Unity hlsl
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityInput.hlsl"
+
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
 
-// ======== legacy shader functions missing in Unity core RP ========
-float3 TransformObjectToViewPos(float3 positionOS) {
-    return mul(GetWorldToViewMatrix(), mul(GetObjectToWorldMatrix(), float4(positionOS, 1.0))).xyz;
-}
+#include "mybase_Macro.hlsl"
 
-float4 ComputeScreenPos(float4 positionCS) {
-    float4 o = positionCS * 0.5f;
-    o.xy = float2(o.x, o.y * _ProjectionParams.x) + o.w;
-    o.zw = positionCS.zw;
-    return o;
-}
-
-float4 ComputeGrabScreenPos (float4 pos) 
-{
-    #if UNITY_UV_STARTS_AT_TOP
-        float scale = -1.0;
-    #else
-        float scale = 1.0;
-    #endif
-
-    float4 o = pos * 0.5f;
-    o.xy = float2(o.x, o.y*scale) + o.w;
-
-    #ifdef UNITY_SINGLE_PASS_STEREO
-        o.xy = TransformStereoScreenSpaceTex(o.xy, pos.w);
-    #endif
-    
-    o.zw = pos.zw;
-    return o;
-}
-// ======== legacy shader functions missing in Unity core RP ========
-
-
-
-float  my_invLerp(float  from, float  to, float  value) { return (value - from) / (to - from); }
+ float my_invLerp( float from,  float to,  float value) { return (value - from) / (to - from); }
 float2 my_invLerp(float2 from, float2 to, float2 value) { return (value - from) / (to - from); }
 float3 my_invLerp(float3 from, float3 to, float3 value) { return (value - from) / (to - from); }
 float4 my_invLerp(float4 from, float4 to, float4 value) { return (value - from) / (to - from); }
@@ -65,8 +40,7 @@ float4 my_remap(float4 origFrom, float4 origTo, float4 targetFrom, float4 target
     return lerp(targetFrom, targetTo, rel);
 }
 
-float3x3 my_inverse(float3x3 m)
-{
+float3x3 my_inverse(float3x3 m) {
     return 1.0 / determinant(m) *
         float3x3(
             m._22 * m._33 - m._23 * m._32,       -(m._12 * m._33 - m._13 * m._32),       m._12 * m._23 - m._13 * m._22,

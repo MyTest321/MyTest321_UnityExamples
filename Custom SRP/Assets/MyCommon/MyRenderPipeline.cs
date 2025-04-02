@@ -3,20 +3,21 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 public abstract class MyRenderPipelineAssetBase : RenderPipelineAsset/*, ISerializationCallbackReceiver*/ {
-
 }
 
 public abstract class MyCameraRendererBase {
-    protected ScriptableRenderContext m_context;
-    protected Camera                  m_camera;
-    protected CullingResults          m_cullingResults;
-    protected CommandBuffer           m_cmd = new CommandBuffer();
+    protected ScriptableRenderContext   m_context;
+    protected Camera                    m_camera;
+    protected CullingResults            m_cullingResults;
+    protected MyRenderPipelineAssetBase m_asset;
+    protected CommandBuffer             m_cmd = new CommandBuffer();
 
     protected abstract void OnRender(MyRenderPipelineAssetBase asset);
 
     public void Render(ref ScriptableRenderContext context, Camera camera, MyRenderPipelineAssetBase asset) {
 		m_context = context;
 		m_camera  = camera;
+        m_asset   = asset;
         OnRender(asset);
 	}
 
@@ -39,8 +40,8 @@ public abstract class MyCameraRendererBase {
 }
 
 public abstract class MyRenderPipelineBase : RenderPipeline {
-    protected readonly MyRenderPipelineAssetBase m_asset;
     protected readonly MyCameraRendererBase m_renderer;
+    protected readonly MyRenderPipelineAssetBase m_asset;
 
     protected MyRenderPipelineBase(MyCameraRendererBase renderer, MyRenderPipelineAssetBase asset) {
         m_renderer = renderer;
